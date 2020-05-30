@@ -3,6 +3,7 @@ import Bookmark from './Bookmark';
 import { Grid, Select, MenuItem, Button } from '@material-ui/core';
 import BookmarkService from './BookmarkService';
 import BookmarkEditForm from './BookmarkEditForm';
+import { useUserContext } from './BookmarkHome';
 
 const BookmarkList: React.FunctionComponent = () => {
 
@@ -10,6 +11,7 @@ const BookmarkList: React.FunctionComponent = () => {
     const [bookmarks, setBookmarks] = React.useState(bookmarkService.getBookmarks());
     const [bookmarkSort, setBookmarkSort] = React.useState(0);
     const [addFormOpen, setAddFormOpen] = React.useState(false);
+    const user = useUserContext();
 
     const newBookmark: BookmarkType = {
         name: '',
@@ -44,10 +46,12 @@ const BookmarkList: React.FunctionComponent = () => {
         <React.Fragment>
             <Grid container spacing={4}>
                 <Grid item xs={1}>
+                { user.isLoggedIn &&
                     <React.Fragment>
                         <Button variant="contained" color="secondary" onClick={handleBookmarkAddFormOpen}>Neu</Button>
                         <BookmarkEditForm open={addFormOpen} onClose={handleBookmarkAddFormClose} onSave={handleBookmarkAddFormSave} bookmark={newBookmark} />
-                    </React.Fragment>                    
+                    </React.Fragment>
+                }                    
                 </Grid>
                 <Grid item xs={9} />
                 <Grid item xs={2}>
