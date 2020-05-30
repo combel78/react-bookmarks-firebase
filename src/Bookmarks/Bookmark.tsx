@@ -5,6 +5,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { Grid, Paper, Typography, Link, IconButton } from "@material-ui/core";
 import BookmarkEditForm from "./BookmarkEditForm";
 import BookmarkService from "./BookmarkService";
+import { useUserContext } from './BookmarkHome';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -24,6 +25,8 @@ const Bookmark: React.FC<BookmarkProps> = (bookmarkProps) => {
     const classes = useStyles();
 
     const bookmarkService = new BookmarkService();
+
+    const user = useUserContext();
 
     const [currBookmark, setCurrentBookmark] = React.useState(bookmarkProps.bookmark);
 
@@ -63,9 +66,11 @@ const Bookmark: React.FC<BookmarkProps> = (bookmarkProps) => {
                             </Grid>
                             <Grid item xs={2}>
                                 <Grid container justify="flex-end">
+                                { user.isLoggedIn &&
                                     <IconButton size="small" color="primary" onClick={handleBookmarkEditFormOpen}>
                                         <EditIcon />
                                     </IconButton>
+                                }
                                 </Grid>
                             </Grid>
                             <Grid item xs={12}>
