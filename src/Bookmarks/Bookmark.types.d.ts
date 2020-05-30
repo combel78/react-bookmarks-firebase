@@ -4,3 +4,8 @@ type BookmarkType = {
     url: string,
     description: string
 }
+
+type UserType = {
+    isLoggedIn: boolean,
+    name: string
+}

@@ -1,9 +1,10 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, FormControl, InputLabel, Input, Grid, Paper, Avatar } from '@material-ui/core';
+import { Button, FormControl, InputLabel, Input, Grid, Paper, Avatar, Snackbar } from '@material-ui/core';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
-import { Link as RouterLink } from 'react-router-dom';
+import { useHistory, Link as RouterLink } from 'react-router-dom';
+import FirebaseService from './FirebaseService';
 
 const useStyles = makeStyles(theme => ({
     mainContent: {
@@ -37,10 +38,22 @@ const useStyles = makeStyles(theme => ({
 const Register: React.FC = () => {
 
     const classes = useStyles();
+    const history = useHistory();
 
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [openMsg, setOpenMsg] = React.useState({ open: false, message: ''});
+
+    const handleRegister = async () => {
+        console.log('handleRegister!');
+        try {
+            await FirebaseService.register(name, email, password);
+            history.replace('/');
+        } catch(error) {
+            setOpenMsg({open: true, message: error.message});
+        }
+    }
 
     return (
         <React.Fragment>
@@ -54,7 +67,6 @@ const Register: React.FC = () => {
                         <Avatar className={classes.avatar}>
                             <BookmarksIcon />
                         </Avatar>
-
                         <form className={classes.form} onSubmit={e => e.preventDefault()}>
                             <FormControl className={classes.formControl} required fullWidth>
                                 <InputLabel htmlFor="name">Name</InputLabel>
@@ -69,10 +81,10 @@ const Register: React.FC = () => {
                                 <Input type="password" id="password" name="password" autoComplete="off" value={password} onChange={e => setPassword(e.target.value)} />
                             </FormControl>
                             <FormControl className={classes.formControl} fullWidth>
-                                <Button type="submit" className={classes.formButton} variant="contained" color="primary">Registrieren</Button>
+                                <Button type="submit" className={classes.formButton} variant="contained" color="primary" onClick={handleRegister}>Registrieren</Button>
                             </FormControl>
                         </form>
-
+                        <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'right'}} open={openMsg.open} autoHideDuration={4000} onClose={() => setOpenMsg({open: false, message: ''})} message={openMsg.message} />
                     </Paper>
                 </Grid>
                 <Grid item xs={3} />
