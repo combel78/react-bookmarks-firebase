@@ -25,9 +25,7 @@ const BookmarkEditForm: React.FC<BookmarkEditFormProps> = (bookmarkEditFormProps
 
     const classes = useStyles();
 
-    const [inputName, setInputName] = React.useState(bookmarkEditFormProps.bookmark.name);
-
-    
+    const [inputName, setInputName] = React.useState(bookmarkEditFormProps.bookmark.name);    
     const [inputUrl, setInputUrl] = React.useState(bookmarkEditFormProps.bookmark.url);
     const [inputDescription, setInputDescription] = React.useState(bookmarkEditFormProps.bookmark.description);
 
@@ -59,6 +57,11 @@ const BookmarkEditForm: React.FC<BookmarkEditFormProps> = (bookmarkEditFormProps
             name: inputName,
             url: inputUrl,
             description: inputDescription
+        }
+        if(!bookmarkEditFormProps.bookmark.id) {
+            setInputName('');
+            setInputUrl('');
+            setInputDescription('');
         }
         bookmarkEditFormProps.onSave(saveObject);
     }

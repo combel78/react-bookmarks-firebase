@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import { Grid, Paper, Typography, Link, IconButton } from "@material-ui/core";
 import BookmarkEditForm from "./BookmarkEditForm";
-import BookmarkService from "./BookmarkService";
 import { useUserContext } from './BookmarkHome';
 
 const useStyles = makeStyles(theme => ({
@@ -17,14 +16,13 @@ const useStyles = makeStyles(theme => ({
 
 interface BookmarkProps {
     bookmark: BookmarkType,
-    onReloadList?: any,
+    onBookmarkSave: any,
+    onBookmarkDelete: any,
 }
 
 const Bookmark: React.FC<BookmarkProps> = (bookmarkProps) => {
 
     const classes = useStyles();
-
-    const bookmarkService = new BookmarkService();
 
     const user = useUserContext();
 
@@ -43,13 +41,12 @@ const Bookmark: React.FC<BookmarkProps> = (bookmarkProps) => {
     const handleBookmarkEditFormSave = (bookmark: BookmarkType) => {
         setCurrentBookmark(bookmark);
         setEditFormOpen(false);
-        bookmarkService.updateBookmark(bookmark);
+        bookmarkProps.onBookmarkSave(bookmark);
     }
 
     const handleBookmarkEditFormDelete = (bookmark: BookmarkType) => {
         setEditFormOpen(false);
-        bookmarkService.deleteBookmark(bookmark);
-        bookmarkProps.onReloadList();
+        bookmarkProps.onBookmarkDelete(bookmark);
     }
 
     return(
