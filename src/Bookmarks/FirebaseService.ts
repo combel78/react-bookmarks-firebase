@@ -47,6 +47,10 @@ class FirebaseService {
             }
         })
     }
+
+    public getDb() {
+        return this.db;
+    }
 }
 
 export default new FirebaseService();

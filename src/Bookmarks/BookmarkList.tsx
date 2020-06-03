@@ -8,20 +8,31 @@ import { useUserContext } from './BookmarkHome';
 const BookmarkList: React.FunctionComponent = () => {
 
     const bookmarkService = new BookmarkService();
-    const [bookmarks, setBookmarks] = React.useState(bookmarkService.getBookmarks());
-    const [bookmarkSort, setBookmarkSort] = React.useState(0);
-    const [addFormOpen, setAddFormOpen] = React.useState(false);
-    const user = useUserContext();
-
+    
     const newBookmark: BookmarkType = {
         name: '',
         url: '',
         description: '',
     }
 
+    const [bookmarks, setBookmarks] = React.useState<Array<BookmarkType>>([]);
+    const [bookmarkSort, setBookmarkSort] = React.useState(0);
+    const [addFormOpen, setAddFormOpen] = React.useState(false);
+    const user = useUserContext();
+
+    //lade Bookmarks
+    React.useEffect(() => {
+        const onBookmarksCallback = (newBookmarks: Array<BookmarkType>) => {
+            if(bookmarks.length !== newBookmarks.length) {
+                setBookmarks(newBookmarks);
+            }
+        }
+        bookmarkService.onBookmarks(onBookmarksCallback);
+    }, [bookmarkService, bookmarks.length]);
+
     const handleBookmarkSort = (event: React.ChangeEvent<{value: unknown}>) => {
         setBookmarkSort(event.target.value as number);
-        setBookmarks(bookmarkService.getBookmarksSort(event.target.value as number));
+        bookmarkService.bookmarksSort(event.target.value as number, bookmarks, setBookmarks);
     }
 
     const handleBookmarkAddFormOpen = () => {
@@ -34,12 +45,15 @@ const BookmarkList: React.FunctionComponent = () => {
 
     const handleBookmarkAddFormSave = (bookmark: BookmarkType) => {
         setAddFormOpen(false);
-        bookmarkService.addBookmark(bookmark);
-        handleReloadList();
+        bookmarkService.addBookmark(bookmarks, bookmark);
     }
 
-    const handleReloadList = () => {
-        setBookmarks(bookmarkService.getBookmarksSort(bookmarkSort));
+    const handleBookmarkSave = (bookmark: BookmarkType) => {
+        bookmarkService.updateBookmark(bookmarks, bookmark);
+    }
+
+    const handleBookmarkDelete = (bookmark: BookmarkType) => {
+        bookmarkService.deleteBookmark(bookmarks, bookmark, setBookmarks);
     }
 
     return (
@@ -67,7 +81,7 @@ const BookmarkList: React.FunctionComponent = () => {
                 <Grid item xs={12}>
                     {
                         bookmarks.map((bookmark: BookmarkType) => {
-                            return <Bookmark bookmark={bookmark} key={bookmark.id} onReloadList={handleReloadList} />
+                            return <Bookmark bookmark={bookmark} key={bookmark.id} onBookmarkSave={handleBookmarkSave} onBookmarkDelete={handleBookmarkDelete} />
                         })
                     }
                 </Grid>
