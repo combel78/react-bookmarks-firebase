@@ -60,6 +60,11 @@ const BookmarkEditForm: React.FC<BookmarkEditFormProps> = (bookmarkEditFormProps
             url: inputUrl,
             description: inputDescription
         }
+        if(!bookmarkEditFormProps.bookmark.id) {
+            setInputName('');
+            setInputUrl('');
+            setInputDescription('');
+        }
         bookmarkEditFormProps.onSave(saveObject);
     }
 

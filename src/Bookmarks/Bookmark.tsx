@@ -58,7 +58,7 @@ const Bookmark: React.FC<BookmarkProps> = (bookmarkProps) => {
                         <Grid container>
                             <Grid item xs={10}>
                                 <Typography variant="h6" align="left" gutterBottom>
-                                    <Link href={currBookmark.url} target="_blank" rel="noreferrer">{currBookmark.name}</Link>
+                                    <Link data-testid="bookmark-link-element" href={currBookmark.url} target="_blank" rel="noreferrer">{currBookmark.name}</Link>
                                 </Typography>
                             </Grid>
                             <Grid item xs={2}>
@@ -71,7 +71,7 @@ const Bookmark: React.FC<BookmarkProps> = (bookmarkProps) => {
                                 </Grid>
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant="subtitle1" align="left">{currBookmark.description}</Typography>
+                                <Typography variant="subtitle1" align="left" data-testid="bookmark-descr-element">{currBookmark.description}</Typography>
                             </Grid>                            
                         </Grid>
                     </Paper>
